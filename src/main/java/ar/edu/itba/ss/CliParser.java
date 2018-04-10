@@ -4,24 +4,25 @@ import org.apache.commons.cli.*;
 
 public class CliParser {
 
-    static double mass = 70, k = 10000, gamma = 100, tf = 5, r = 1;
-    static double speed;
-
     private static Options createOptions(){
         Options options = new Options();
         options.addOption("h", "help", false, "Shows this screen.");
         options.addOption("m", "mass", true, "Mass of the particle.");
         options.addOption("k", "elasticity", true, "Elasticity of the system.");
         options.addOption("g", "gamma", true, "Gamma of the system.");
-        options.addOption("tf", "final-time", true, "Time when the simulation ends");
+        options.addOption("tf", "finalTime", true, "Time when the simulation ends");
         options.addOption("r", "position", true, "Initial position of the particle.");
+        options.addOption("dt", "deltaTime", true, "Interval of time.");
+        options.addOption("alg", "algorithm", true, "Algorithm to run.");
         return options;
     }
 
-    public static void parseOptions(String[] args){
+    public static Algorithm parseOptions(String[] args){
         Options options = createOptions();
         CommandLineParser parser = new BasicParser();
 
+        double mass = 70, k = 10000, gamma = 100, tf = 5, r = 1, dt = 0.01;
+        String algorithm = "gp";
         try {
             CommandLine cmd = parser.parse(options, args);
             if (cmd.hasOption("m"))
@@ -34,12 +35,29 @@ public class CliParser {
                 tf = Double.parseDouble(cmd.getOptionValue("tf"));
             if (cmd.hasOption("r"))
                 r = Double.parseDouble(cmd.getOptionValue("r"));
+            if (cmd.hasOption("dt"))
+                dt = Double.parseDouble(cmd.getOptionValue("dt"));
+            if (cmd.hasOption("dt"))
+                algorithm = cmd.getOptionValue("alg");
 
-            speed = - gamma / 2 * mass;
+            Configuration config = new Configuration(k, mass, gamma, tf, r, dt);
+            switch (algorithm){
+                case "gp":
+                    return new GearPredictor(config);
+                case "bm":
+                    break;
+                case "ve":
+                    break;
+                default:
+                    throw new IllegalStateException("No algorithm available");
+            }
+
         }catch (Exception e){
             System.out.println("Command not recognized.");
             help(options);
         }
+
+        return null;
     }
 
     private static void help(Options options){
