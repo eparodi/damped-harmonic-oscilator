@@ -25,6 +25,8 @@ public class CliParser {
         String algorithm = "gp";
         try {
             CommandLine cmd = parser.parse(options, args);
+            if (cmd.hasOption("h"))
+                help(options);
             if (cmd.hasOption("m"))
                 mass = Double.parseDouble(cmd.getOptionValue("m"));
             if (cmd.hasOption("k"))
@@ -37,7 +39,7 @@ public class CliParser {
                 r = Double.parseDouble(cmd.getOptionValue("r"));
             if (cmd.hasOption("dt"))
                 dt = Double.parseDouble(cmd.getOptionValue("dt"));
-            if (cmd.hasOption("dt"))
+            if (cmd.hasOption("alg"))
                 algorithm = cmd.getOptionValue("alg");
 
             Configuration config = new Configuration(k, mass, gamma, tf, r, dt);
@@ -45,7 +47,7 @@ public class CliParser {
                 case "gp":
                     return new GearPredictor(config);
                 case "bm":
-                    break;
+                    return new Beeman(config);
                 case "ve":
                     break;
                 default:
@@ -62,7 +64,7 @@ public class CliParser {
 
     private static void help(Options options){
         HelpFormatter helpFormatter = new HelpFormatter();
-        helpFormatter.printHelp("Main", options);
+        helpFormatter.printHelp("damped-harmonic-oscilator", options);
         System.exit(0);
     }
 }
