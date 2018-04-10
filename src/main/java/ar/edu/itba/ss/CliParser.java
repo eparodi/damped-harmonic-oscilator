@@ -49,7 +49,7 @@ public class CliParser {
                 case "bm":
                     return new Beeman(config);
                 case "ve":
-                    break;
+                    return new Verlet(config);
                 default:
                     throw new IllegalStateException("No algorithm available");
             }

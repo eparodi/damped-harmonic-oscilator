@@ -26,7 +26,7 @@ public class GearPredictor implements Algorithm{
             double[] predictions = getPrediction(derivatives);
             double error = evaluate(predictions);
             derivatives = fix(predictions, error);
-            System.out.println(derivatives);
+            System.out.println(derivatives.get(0));
             time += config.deltaTime;
         }
     }
