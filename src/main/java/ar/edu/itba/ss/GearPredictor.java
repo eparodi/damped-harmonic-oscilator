@@ -20,6 +20,7 @@ public class GearPredictor implements Algorithm{
         derivatives.add(config.position);
         derivatives.add(config.speed);
         derivatives = recursiveDerivatives(ORDER, 1, derivatives);
+        System.out.println(derivatives.get(0));
         double time = 0;
         while(time < config.finalTime){
             double[] predictions = getPrediction(derivatives);
