@@ -17,25 +17,21 @@ public class Beeman implements Algorithm {
         double prevR = r - v * dt; /* x(t - dt) */
         double prevA = acceleration(prevR, v); /* a(t - dt) */
 
-        System.out.println(r);
+        System.out.println(r + "\t" + v);
 
         for (double t = 0; t < config.finalTime; t+=dt){
-
-            /* Backup values */
-            double oldR = r;
-            double oldV = v;
 
             /* a(t) */
             double a = acceleration(r, v);
 
-            r = r + v * dt + (2/3) * a * Math.pow(dt, 2) - (1/6) * prevA * Math.pow(dt, 2);
-            double predictedV = v + (3/2) * a * dt - (1/2) * prevA * dt;
+            r = r + v * dt + (2.0/3) * a * Math.pow(dt, 2) - (1.0/6) * prevA * Math.pow(dt, 2);
+            double predictedV = v + (3.0/2) * a * dt - (1.0/2) * prevA * dt;
             double newA = acceleration(r, predictedV);
-            v = v + 1/3 * newA * dt + (5/6) * a * dt - (1/6) * prevA * dt;
+            v = v + 1.0/3 * newA * dt + (5.0/6) * a * dt - (1.0/6) * prevA * dt;
 
-            prevA = acceleration(oldR, oldV);
+            prevA = a;
 
-            System.out.println(r);
+            System.out.println(r + "\t" + v);
         }
     }
 

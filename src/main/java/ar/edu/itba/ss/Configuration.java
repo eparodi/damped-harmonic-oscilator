@@ -11,7 +11,7 @@ public class Configuration {
         this.gamma = gamma;
         this.finalTime = finalTime;
         this.position = position;
-        this.speed = - gamma / 2 * mass;
+        this.speed = - gamma / (2 * mass);
         this.deltaTime = deltaTime;
     }
 
