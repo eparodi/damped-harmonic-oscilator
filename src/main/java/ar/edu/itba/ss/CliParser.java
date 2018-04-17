@@ -1,5 +1,6 @@
 package ar.edu.itba.ss;
 
+import ar.edu.itba.ss.voyager.Voyager;
 import org.apache.commons.cli.*;
 
 public class CliParser {
@@ -14,6 +15,7 @@ public class CliParser {
         options.addOption("r", "position", true, "Initial position of the particle.");
         options.addOption("dt", "deltaTime", true, "Interval of time.");
         options.addOption("alg", "algorithm", true, "Algorithm to run.");
+        options.addOption("vo", "voyager", false, "Simulate Voyager 1.");
         return options;
     }
 
@@ -41,6 +43,11 @@ public class CliParser {
                 dt = Double.parseDouble(cmd.getOptionValue("dt"));
             if (cmd.hasOption("alg"))
                 algorithm = cmd.getOptionValue("alg");
+            if (cmd.hasOption("vo")) {
+                Configuration config = new Configuration(tf, dt);
+                Voyager.voyager(config);
+                System.exit(0);
+            }
 
             Configuration config = new Configuration(k, mass, gamma, tf, r, dt);
             switch (algorithm){
