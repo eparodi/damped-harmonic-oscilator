@@ -9,7 +9,7 @@ public class GearPredictor implements Algorithm{
     private static final int ORDER = 5;
     private static final int LENGTH = 6;
     private static final int[] factorials = {1, 1, 2, 6, 24, 120};
-    private static final double[] alphaOrder5 = {3.0/16, 251.0/360, 1, 11.0/18, 1.0/6, 1.0/60};
+    private static final double[] alphaOrder5 = {3.0/16, 251.0/360, 1.0, 11.0/18, 1.0/6, 1.0/60};
 
     public GearPredictor(Configuration config){
         this.config = config;
@@ -26,8 +26,8 @@ public class GearPredictor implements Algorithm{
             double[] predictions = getPrediction(derivatives);
             double error = evaluate(predictions);
             derivatives = fix(predictions, error);
-            System.out.println(time + " " + derivatives.get(0));
             time += config.deltaTime;
+            System.out.println(time + " " + derivatives.get(0));
         }
     }
 
