@@ -18,9 +18,9 @@ public class Verlet implements Algorithm{
             double force = - (config.elasticity * position + config.gamma * speed);
             double newPosition = 2 * position - previousPosition + Math.pow(config.deltaTime, 2) * force / config.mass;
             speed = getSpeed(newPosition, previousPosition);
-            System.out.println(position + "\t" + speed);
-            position = newPosition;
+            System.out.println(time + "\t" + position);
             previousPosition = position;
+            position = newPosition;
             time += config.deltaTime;
         }
     }
@@ -33,6 +33,6 @@ public class Verlet implements Algorithm{
     }
 
     private double getSpeed(double position, double previousPosition){
-        return position - previousPosition / (2 * config.deltaTime);
+        return (position - previousPosition) / (2 * config.deltaTime);
     }
 }
