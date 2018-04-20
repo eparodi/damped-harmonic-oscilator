@@ -18,10 +18,10 @@ public class Parser {
         List<Planet> planets = new ArrayList<>();
 
         for (int i = 0; i < numberOfPlanets; i++) {
-            double x = sc.nextDouble();
-            double y = sc.nextDouble();
-            double vx = sc.nextDouble();
-            double vy = sc.nextDouble();
+            double x = sc.nextDouble() * 1000;
+            double y = sc.nextDouble() * 1000;
+            double vx = sc.nextDouble() * 1000;
+            double vy = sc.nextDouble() * 1000;
             Planet p = new Planet(i+1, x, y, vx, vy);
             planets.add(p);
         }

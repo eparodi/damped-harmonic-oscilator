@@ -4,6 +4,7 @@ import ar.edu.itba.ss.voyager.Planet;
 import ar.edu.itba.ss.voyager.Voyager;
 import org.apache.commons.cli.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.System.exit;
@@ -56,14 +57,14 @@ public class CliParser {
 
                 if (cmd.hasOption("pf"))
                     planetFile = cmd.getOptionValue("pf");
-
+                    List<Planet> planets = new ArrayList<>();
                 try {
-                    List<Planet> planets = Parser.planetParse(planetFile);
+                    planets = Parser.planetParse(planetFile);
                 }catch (Exception e){
                     System.out.println("File not found.");
                     exit(1);
                 }
-                Voyager.voyager(config);
+                Voyager.voyager(config, planets);
                 exit(0);
             }
 

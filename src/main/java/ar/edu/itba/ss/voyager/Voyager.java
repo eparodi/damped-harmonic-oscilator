@@ -8,17 +8,11 @@ import java.util.List;
 public class Voyager {
 
     private static double G = 6.693*Math.pow(10, -11);
-    private static double AU = 149598073;
-    private static double VOYAGER_DISTANCE = 1500000; /* 1500 km */
-    private static double VOYAGER_SPEED = 11000; /* 11 km/s */
+    private static final double AU = 149598073;
+    private static final double VOYAGER_DISTANCE = 1500000; /* 1500 km */
+    private static final double VOYAGER_SPEED = 11000; /* 11 km/s */
 
-    //private static double EARTH_X = -2.75312*Math.pow(10, 10);
-    //private static double EARTH_Y = 1.444972*Math.pow(10, 10);
-    private static double EARTH_X = -1.496*Math.pow(10, 11);
-    private static double EARTH_Y = -1.496*Math.pow(10, 11);
-
-    private static double EARTH_VX = -2.97390*Math.pow(10, 4);
-    private static double EARTH_VY = -5000.69217;
+    private static final int SUN_ID = 0;
 
     private static final double EARTH_MASS = 5.97219 * Math.pow(10, 24);
     private static final double VOYAGER_MASS = 721;
@@ -26,34 +20,43 @@ public class Voyager {
     private static final double JUPITER_MASS = 1898.13 * Math.pow(10, 24);
     private static final double SATURN_MASS = 5.68319 * Math.pow(10, 26);
 
+    private static final double EARTH_RADIUS = 6371000;
 
-    public static void voyager(Configuration config) throws CloneNotSupportedException {
+    public static void voyager(Configuration config, List<Planet> planets) throws CloneNotSupportedException {
 
-        List<Planet> planets = new ArrayList<>();
+        Planet earth = planets.get(0);
 
         double earthSunAngle = 0;
-        if (EARTH_X == 0) {
-            earthSunAngle = Math.signum(EARTH_Y) * Math.PI / 2;
+        if (earth.x == 0) {
+            earthSunAngle = Math.signum(earth.y) * Math.PI / 2;
         }else{
-            earthSunAngle = Math.atan(EARTH_Y/EARTH_X);
-            if ((EARTH_X < 0 && EARTH_Y > 0) || (EARTH_X < 0 && EARTH_Y < 0)){
+            earthSunAngle = Math.atan(earth.y/earth.x);
+            if ((earth.x < 0 && earth.y > 0) || (earth.x < 0 && earth.y < 0)){
                 earthSunAngle += Math.PI;
             }
         }
 
         double tangentAngle = Math.PI - earthSunAngle;
 
-        planets.add(new Planet(1, EARTH_X + VOYAGER_DISTANCE*Math.cos(earthSunAngle), EARTH_Y + VOYAGER_DISTANCE*Math.sin(earthSunAngle), EARTH_VX + VOYAGER_SPEED*Math.cos(tangentAngle), EARTH_VY + VOYAGER_SPEED*Math.sin(tangentAngle), VOYAGER_MASS, 0.002)); //Voyager 1
-        planets.add(new Planet(2, 0.0, 0.0, 0, 0, SUN_MASS, 0.04)); // Sun
-        planets.add(new Planet(3, EARTH_X, EARTH_Y, EARTH_VX, EARTH_VY, EARTH_MASS, 0.03)); // Earth
-        planets.add(new Planet(4, -20000000.0, 100000.0, 100, 100, JUPITER_MASS, 0.03)); // Jupiter
-        planets.add(new Planet(5, 100000.0, 200000.0, 100, 100, SATURN_MASS, 0.03)); // Saturn
+        earth.mass = EARTH_MASS;
+        earth.radius = 0.03;
+
+        Planet jupiter = planets.get(1);
+        jupiter.mass = JUPITER_MASS;
+        jupiter.radius = 0.03;
+
+        Planet saturn = planets.get(2);
+        saturn.mass = SATURN_MASS;
+        saturn.radius = 0.03;
+
+        planets.add(new Planet(SUN_ID, 0.0, 0.0, 0, 0, SUN_MASS, 0.04)); // Sun
+        planets.add(new Planet(4, EARTH_RADIUS + earth.x + VOYAGER_DISTANCE*Math.cos(earthSunAngle), EARTH_RADIUS + earth.y + VOYAGER_DISTANCE*Math.sin(earthSunAngle), earth.vx + VOYAGER_SPEED*Math.cos(tangentAngle), earth.vy + VOYAGER_SPEED*Math.sin(tangentAngle), VOYAGER_MASS, 0.02)); //Voyager 1
 
         double dt = config.deltaTime;
 
         /* Initialize variables */
         for (Planet p : planets){
-            if (p.id != 2) {
+            if (p.id != SUN_ID) {
                 p.prevX = p.x - p.vx * dt; /* x(t - dt) */
                 p.prevY = p.y - p.vy * dt;
                 //p.prevX = p.x - VOYAGER_DISTANCE*Math.cos((VOYAGER_SPEED/VOYAGER_DISTANCE)*dt);
@@ -79,7 +82,7 @@ public class Voyager {
             }
 
             for (Planet p : planets) {
-                if (p.id != 2) {
+                if (p.id != SUN_ID) {
                     double force[] = force(p, oldPlanets);
 
                     double fx = force[0];
