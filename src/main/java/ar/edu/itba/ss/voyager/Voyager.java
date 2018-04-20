@@ -26,7 +26,7 @@ public class Voyager {
 
         Planet earth = planets.get(0);
 
-        double earthSunAngle = 0;
+        double earthSunAngle;
         if (earth.x == 0) {
             earthSunAngle = Math.signum(earth.y) * Math.PI / 2;
         }else{
@@ -36,7 +36,20 @@ public class Voyager {
             }
         }
 
-        double tangentAngle = Math.PI - earthSunAngle;
+        double velocityAngle;
+        if (earth.vx == 0) {
+            velocityAngle = Math.signum(earth.vy) * Math.PI / 2;
+        }else{
+            velocityAngle = Math.atan(earth.vy/earth.vx);
+            if ((earth.vx < 0 && earth.vy > 0) || (earth.vx < 0 && earth.vy < 0)){
+                velocityAngle += Math.PI;
+            }
+        }
+
+        double voyagerX = earth.x + (VOYAGER_DISTANCE + EARTH_RADIUS) *Math.cos(earthSunAngle);
+        double voyagerY = earth.y + (VOYAGER_DISTANCE + EARTH_RADIUS) *Math.sin(earthSunAngle);
+        double voyagerVx = earth.vx + VOYAGER_SPEED*Math.cos(velocityAngle);
+        double voyagerVy = earth.vy + VOYAGER_SPEED*Math.sin(velocityAngle);
 
         earth.mass = EARTH_MASS;
         earth.radius = 0.03;
@@ -50,7 +63,7 @@ public class Voyager {
         saturn.radius = 0.03;
 
         planets.add(new Planet(SUN_ID, 0.0, 0.0, 0, 0, SUN_MASS, 0.04)); // Sun
-        planets.add(new Planet(4, EARTH_RADIUS + earth.x + VOYAGER_DISTANCE*Math.cos(earthSunAngle), EARTH_RADIUS + earth.y + VOYAGER_DISTANCE*Math.sin(earthSunAngle), earth.vx + VOYAGER_SPEED*Math.cos(tangentAngle), earth.vy + VOYAGER_SPEED*Math.sin(tangentAngle), VOYAGER_MASS, 0.02)); //Voyager 1
+        planets.add(new Planet(4, voyagerX, voyagerY, voyagerVx, voyagerVy, VOYAGER_MASS, 0.02)); //Voyager 1
 
         double dt = config.deltaTime;
 
@@ -138,7 +151,15 @@ public class Voyager {
 
                 double dx = otherPlanet.x - p.x;
                 double dy = otherPlanet.y - p.y;
-                double angle = Math.atan(dy / dx);
+                double angle;
+                if (dx == 0) {
+                    angle = Math.signum(dy) * Math.PI / 2;
+                }else{
+                    angle = Math.atan(dy/dx);
+                    if ((dx < 0 && dy > 0) || (dx < 0 && dy < 0)){
+                        angle += Math.PI;
+                    }
+                }
                 force[0] += f * Math.cos(angle);
                 force[1] += f * Math.sin(angle);
             }
