@@ -24,6 +24,14 @@ public class Planet implements Cloneable{
         this.radius = radius;
     }
 
+    public Planet(int id, double x, double y, double vx, double vy){
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+    }
+
     Planet getClone() throws CloneNotSupportedException {
         return (Planet) super.clone();
     }

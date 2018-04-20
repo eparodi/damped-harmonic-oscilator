@@ -1,7 +1,12 @@
 package ar.edu.itba.ss;
 
+import ar.edu.itba.ss.voyager.Planet;
 import ar.edu.itba.ss.voyager.Voyager;
 import org.apache.commons.cli.*;
+
+import java.util.List;
+
+import static java.lang.System.exit;
 
 public class CliParser {
 
@@ -16,6 +21,7 @@ public class CliParser {
         options.addOption("dt", "deltaTime", true, "Interval of time.");
         options.addOption("alg", "algorithm", true, "Algorithm to run.");
         options.addOption("vo", "voyager", false, "Simulate Voyager 1.");
+        options.addOption("pf", "planetFile", true, "File with the planets positions.");
         return options;
     }
 
@@ -45,8 +51,20 @@ public class CliParser {
                 algorithm = cmd.getOptionValue("alg");
             if (cmd.hasOption("vo")) {
                 Configuration config = new Configuration(tf, dt);
+
+                String planetFile = "";
+
+                if (cmd.hasOption("pf"))
+                    planetFile = cmd.getOptionValue("pf");
+
+                try {
+                    List<Planet> planets = Parser.planetParse(planetFile);
+                }catch (Exception e){
+                    System.out.println("File not found.");
+                    exit(1);
+                }
                 Voyager.voyager(config);
-                System.exit(0);
+                exit(0);
             }
 
             Configuration config = new Configuration(k, mass, gamma, tf, r, dt);
@@ -72,6 +90,6 @@ public class CliParser {
     private static void help(Options options){
         HelpFormatter helpFormatter = new HelpFormatter();
         helpFormatter.printHelp("damped-harmonic-oscilator", options);
-        System.exit(0);
+        exit(0);
     }
 }
