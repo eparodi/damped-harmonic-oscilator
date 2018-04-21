@@ -21,6 +21,11 @@ public class Voyager {
     private static final double SATURN_MASS = 5.68319 * Math.pow(10, 26);
 
     private static final double EARTH_RADIUS = 6371000;
+    private static final int[] EARTH_COLOUR = {0, 0, 255};
+    private static final int[] VOYAGER_COLOUR = {255, 255, 255};
+    private static final int[] SUN_COLOUR = {255, 255, 0};
+    private static final int[] JUPITER_COLOUR = {255, 165, 0};
+    private static final int[] SATURN_COLOUR = {0, 255, 0};
 
     public static void voyager(Configuration config, List<Planet> planets) throws CloneNotSupportedException {
 
@@ -53,17 +58,20 @@ public class Voyager {
 
         earth.mass = EARTH_MASS;
         earth.radius = 0.03;
+        earth.colour = EARTH_COLOUR;
 
         Planet jupiter = planets.get(1);
         jupiter.mass = JUPITER_MASS;
         jupiter.radius = 0.03;
+        jupiter.colour = JUPITER_COLOUR;
 
         Planet saturn = planets.get(2);
         saturn.mass = SATURN_MASS;
         saturn.radius = 0.03;
+        saturn.colour = SATURN_COLOUR;
 
-        planets.add(new Planet(SUN_ID, 0.0, 0.0, 0, 0, SUN_MASS, 0.04)); // Sun
-        planets.add(new Planet(4, voyagerX, voyagerY, voyagerVx, voyagerVy, VOYAGER_MASS, 0.02)); //Voyager 1
+        planets.add(new Planet(SUN_ID, 0.0, 0.0, 0, 0, SUN_MASS, 0.04, SUN_COLOUR)); // Sun
+        planets.add(new Planet(4, voyagerX, voyagerY, voyagerVx, voyagerVy, VOYAGER_MASS, 0.02, VOYAGER_COLOUR)); //Voyager 1
 
         double dt = config.deltaTime;
 
@@ -87,6 +95,7 @@ public class Voyager {
         printPlanets(planets);
 
         List<Planet> oldPlanets = new ArrayList<>();
+        int dt2 = 0;
 
         for (double t = 0; t < config.finalTime; t+=dt) {
 
@@ -119,9 +128,11 @@ public class Voyager {
                 }
             }
             oldPlanets = new ArrayList<>();
-            System.out.println(planets.size());
-            System.out.println(iterations++);
-            printPlanets(planets);
+            if (dt2++ % config.fps == 0) {
+                System.out.println(planets.size());
+                System.out.println(iterations++);
+                printPlanets(planets);
+            }
         }
     }
 
@@ -131,7 +142,8 @@ public class Voyager {
             aux = aux/AU;
             double auy = pi.y/1000;
             auy = auy/AU;
-            System.out.println(aux + "\t" + auy + "\t" + pi.vx + "\t" + pi.vy + "\t" + pi.radius);
+            System.out.println(aux + "\t" + auy + "\t" + pi.vx + "\t" + pi.vy + "\t" + pi.radius +
+                "\t" + pi.colour[0] + "\t" + pi.colour[1] + "\t" + pi.colour[2]);
         }
     }
 

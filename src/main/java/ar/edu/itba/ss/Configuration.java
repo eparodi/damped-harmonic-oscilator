@@ -2,7 +2,7 @@ package ar.edu.itba.ss;
 
 public class Configuration {
 
-    public double elasticity, mass, gamma, finalTime, position, speed, deltaTime;
+    public double elasticity, mass, gamma, finalTime, position, speed, deltaTime, fps;
 
     public Configuration(double elasticity, double mass, double gamma,
                          double finalTime, double position, double deltaTime){
@@ -15,9 +15,10 @@ public class Configuration {
         this.deltaTime = deltaTime;
     }
 
-    public Configuration(double finalTime, double deltaTime){
+    public Configuration(double finalTime, double deltaTime, double fps){
         this.finalTime = finalTime;
         this.deltaTime = deltaTime;
+        this.fps = fps;
     }
 
 }

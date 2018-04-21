@@ -23,6 +23,7 @@ public class CliParser {
         options.addOption("alg", "algorithm", true, "Algorithm to run.");
         options.addOption("vo", "voyager", false, "Simulate Voyager 1.");
         options.addOption("pf", "planetFile", true, "File with the planets positions.");
+        options.addOption("fps", "frames", true, "Frames per second.");
         return options;
     }
 
@@ -51,10 +52,15 @@ public class CliParser {
             if (cmd.hasOption("alg"))
                 algorithm = cmd.getOptionValue("alg");
             if (cmd.hasOption("vo")) {
-                Configuration config = new Configuration(tf, dt);
+
+                double fps = 1;
+                if (cmd.hasOption("fps")){
+                    fps = Integer.parseInt(cmd.getOptionValue("fps"));
+                }
+
+                Configuration config = new Configuration(tf, dt, fps);
 
                 String planetFile = "";
-
                 if (cmd.hasOption("pf"))
                     planetFile = cmd.getOptionValue("pf");
                     List<Planet> planets = new ArrayList<>();
