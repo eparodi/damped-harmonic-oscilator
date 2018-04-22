@@ -29,4 +29,4 @@ with open(filename,"r") as f:
 
     print("MIN DISTANCE BOTH: {dist}".format(dist=min_distance_both))
     print("MIN DISTANCE JUPITER: {dist}".format(dist=min_distance_jupiter))
-    print("MIN DISTANCE BOTH: {dist}".format(dist=min_distance_saturn))
+    print("MIN DISTANCE SATURN: {dist}".format(dist=min_distance_saturn))
