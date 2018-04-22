@@ -22,11 +22,11 @@ with open(filename,"r") as f:
         distance_both = distance_jupiter + distance_saturn
         if distance_both < min_distance_both:
             min_distance_both = distance_both
+        if distance_saturn < min_distance_saturn:
             min_distance_saturn = distance_saturn
+        if distance_jupiter < min_distance_jupiter:
             min_distance_jupiter = distance_jupiter
-            min_x = x
 
     print("MIN DISTANCE BOTH: {dist}".format(dist=min_distance_both))
     print("MIN DISTANCE JUPITER: {dist}".format(dist=min_distance_jupiter))
     print("MIN DISTANCE BOTH: {dist}".format(dist=min_distance_saturn))
-    print("MOMENT: {mom}".format(mom=min_x))
