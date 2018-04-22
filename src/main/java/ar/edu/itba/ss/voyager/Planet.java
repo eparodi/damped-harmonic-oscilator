@@ -12,6 +12,8 @@ public class Planet implements Cloneable{
     double prevY;
     double prevAx;
     double prevAy;
+    double ax;
+    double ay;
     double radius;
     int[] colour;
 

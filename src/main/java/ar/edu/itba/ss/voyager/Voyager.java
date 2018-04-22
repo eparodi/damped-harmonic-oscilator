@@ -75,17 +75,16 @@ public class Voyager {
 
         double dt = config.deltaTime;
 
+        List<Planet> oldPlanets = new ArrayList<>();
+
+        for (Planet p: planets){
+            oldPlanets.add(p.getClone());
+        }
+
         /* Initialize variables */
         for (Planet p : planets){
             if (p.id != SUN_ID) {
-                p.prevX = p.x - p.vx * dt; /* x(t - dt) */
-                p.prevY = p.y - p.vy * dt;
-                //p.prevX = p.x - VOYAGER_DISTANCE*Math.cos((VOYAGER_SPEED/VOYAGER_DISTANCE)*dt);
-                //p.prevY = p.y - VOYAGER_DISTANCE*Math.sin((VOYAGER_SPEED/VOYAGER_DISTANCE)*dt);
-
-                double[] force = force(p, planets);
-                p.prevAx = force[0];
-                p.prevAy = force[1];
+                firstStep(p, oldPlanets, dt);
             }
         }
 
@@ -93,8 +92,8 @@ public class Voyager {
         System.out.println(planets.size());
         System.out.println(iterations++);
         printPlanets(planets);
+        oldPlanets = new ArrayList<>();
 
-        List<Planet> oldPlanets = new ArrayList<>();
         int dt2 = 0;
 
         for (double t = 0; t < config.finalTime; t+=dt) {
@@ -107,26 +106,43 @@ public class Voyager {
                 if (p.id != SUN_ID) {
                     double force[] = force(p, oldPlanets);
 
-                    double fx = force[0];
-                    double fy = force[1];
+                    p.ax = force[0];
+                    p.ay = force[1];
 
 
                     /* Beeman */
-                    p.x = p.x + p.vx * dt + (2.0 / 3) * fx * Math.pow(dt, 2) - (1.0 / 6) * p.prevAx * Math.pow(dt, 2);
-                    p.y = p.y + p.vy * dt + (2.0 / 3) * fy * Math.pow(dt, 2) - (1.0 / 6) * p.prevAy * Math.pow(dt, 2);
+                    p.x = p.x + p.vx * dt + (2.0 / 3) * p.ax * Math.pow(dt, 2) - (1.0 / 6) * p.prevAx * Math.pow(dt, 2);
+                    p.y = p.y + p.vy * dt + (2.0 / 3) * p.ax * Math.pow(dt, 2) - (1.0 / 6) * p.prevAy * Math.pow(dt, 2);
 
-                    double[] newForce = force(p, oldPlanets);
+//                    double[] newForce = force(p, oldPlanets);
+//
+//                    double newAx = newForce[0];
+//                    double newAy = newForce[1];
+//
+//                    p.vx = p.vx + 1.0 / 3 * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
+//                    p.vy = p.vy + 1.0 / 3 * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
+//
+//                    p.prevAx = p.ax;
+//                    p.prevAy = p.ay;
+                }
+            }
+
+            for (Planet p : planets) {
+                if (p.id != SUN_ID) {
+
+                    double[] newForce = force(p, planets);
 
                     double newAx = newForce[0];
                     double newAy = newForce[1];
 
-                    p.vx = p.vx + 1.0 / 3 * newAx * dt + (5.0 / 6) * fx * dt - (1.0 / 6) * p.prevAx * dt;
-                    p.vy = p.vy + 1.0 / 3 * newAy * dt + (5.0 / 6) * fy * dt - (1.0 / 6) * p.prevAy * dt;
+                    p.vx = p.vx + 1.0 / 3 * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
+                    p.vy = p.vy + 1.0 / 3 * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
 
-                    p.prevAx = fx;
-                    p.prevAy = fy;
+                    p.prevAx = p.ax;
+                    p.prevAy = p.ay;
                 }
             }
+
             oldPlanets = new ArrayList<>();
             if (dt2++ % config.fps == 0) {
                 System.out.println(planets.size());
@@ -180,4 +196,16 @@ public class Voyager {
         force[1] = force[1]/p.mass;
         return force;
     }
+
+    private static void firstStep(Planet p, List<Planet> planets, double dt){
+        double[] force = force(p, planets);
+        p.prevAx = force[0];
+        p.prevAy = force[1];
+
+        p.vx = p.vx + dt * p.prevAx;
+        p.vy = p.vy + dt * p.prevAy;
+        p.x = p.x + dt * p.vx + Math.pow(dt, 2) * p.prevAx;
+        p.y = p.y + dt * p.vy + Math.pow(dt, 2) * p.prevAy;
+    }
+
 }
