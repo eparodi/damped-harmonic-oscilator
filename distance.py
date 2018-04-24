@@ -18,7 +18,7 @@ with open(filename,"r") as f:
     min_x = 0
     for x in range(0, len(jupiter_x)):
         distance_jupiter = math.sqrt((jupiter_x[x] - voyager_x[x]) ** 2 + (jupiter_y[x] - voyager_y[x]) ** 2)
-        distance_saturn = math.sqrt((saturn_x[x] - voyager_x[x]) ** 2 + (saturn_y[x] - saturn_y[x]) ** 2)
+        distance_saturn = math.sqrt((saturn_x[x] - voyager_x[x]) ** 2 + (saturn_y[x] - voyager_y[x]) ** 2)
         distance_both = distance_jupiter + distance_saturn
         if distance_both < min_distance_both:
             min_distance_both = distance_both
