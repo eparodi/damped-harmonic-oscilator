@@ -57,21 +57,21 @@ public class Voyager {
         double voyagerVy = earth.vy + VOYAGER_SPEED*Math.sin(velocityAngle);
 
         earth.mass = EARTH_MASS;
-        earth.radius = 0.03;
+        earth.radius = 0.13;
         earth.colour = EARTH_COLOUR;
 
         Planet jupiter = planets.get(1);
         jupiter.mass = JUPITER_MASS;
-        jupiter.radius = 0.03;
+        jupiter.radius = 0.13;
         jupiter.colour = JUPITER_COLOUR;
 
         Planet saturn = planets.get(2);
         saturn.mass = SATURN_MASS;
-        saturn.radius = 0.03;
+        saturn.radius = 0.13;
         saturn.colour = SATURN_COLOUR;
 
-        planets.add(new Planet(SUN_ID, 0.0, 0.0, 0, 0, SUN_MASS, 0.04, SUN_COLOUR)); // Sun
-        planets.add(new Planet(4, voyagerX, voyagerY, voyagerVx, voyagerVy, VOYAGER_MASS, 0.02, VOYAGER_COLOUR)); //Voyager 1
+        planets.add(new Planet(SUN_ID, 0.0, 0.0, 0, 0, SUN_MASS, 0.14, SUN_COLOUR)); // Sun
+        planets.add(new Planet(4, voyagerX, voyagerY, voyagerVx, voyagerVy, VOYAGER_MASS, 0.08, VOYAGER_COLOUR)); //Voyager 1
 
         double dt = config.deltaTime;
 
