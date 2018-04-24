@@ -10,7 +10,7 @@ public class Voyager {
     private static double G = 6.693*Math.pow(10, -11);
     private static final double AU = 149598073;
     private static final double VOYAGER_DISTANCE = 1500000; /* 1500 km */
-    private static final double VOYAGER_SPEED = 15000; /* 11 km/s */
+    private static final double VOYAGER_SPEED = 14000; /* 11 km/s */
 
     private static final int SUN_ID = 0;
 
