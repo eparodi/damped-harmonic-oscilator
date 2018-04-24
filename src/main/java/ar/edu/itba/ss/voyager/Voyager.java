@@ -10,7 +10,7 @@ public class Voyager {
     private static double G = 6.693*Math.pow(10, -11);
     private static final double AU = 149598073;
     private static final double VOYAGER_DISTANCE = 1500000; /* 1500 km */
-    private static final double VOYAGER_SPEED = 11000; /* 11 km/s */
+    private static final double VOYAGER_SPEED = 15000; /* 11 km/s */
 
     private static final int SUN_ID = 0;
 
@@ -113,17 +113,6 @@ public class Voyager {
                     /* Beeman */
                     p.x = p.x + p.vx * dt + (2.0 / 3) * p.ax * Math.pow(dt, 2) - (1.0 / 6) * p.prevAx * Math.pow(dt, 2);
                     p.y = p.y + p.vy * dt + (2.0 / 3) * p.ax * Math.pow(dt, 2) - (1.0 / 6) * p.prevAy * Math.pow(dt, 2);
-
-//                    double[] newForce = force(p, oldPlanets);
-//
-//                    double newAx = newForce[0];
-//                    double newAy = newForce[1];
-//
-//                    p.vx = p.vx + 1.0 / 3 * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
-//                    p.vy = p.vy + 1.0 / 3 * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
-//
-//                    p.prevAx = p.ax;
-//                    p.prevAy = p.ay;
                 }
             }
 
@@ -135,8 +124,8 @@ public class Voyager {
                     double newAx = newForce[0];
                     double newAy = newForce[1];
 
-                    p.vx = p.vx + 1.0 / 3 * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
-                    p.vy = p.vy + 1.0 / 3 * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
+                    p.vx = p.vx + (1.0 / 3) * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
+                    p.vy = p.vy + (1.0 / 3) * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
 
                     p.prevAx = p.ax;
                     p.prevAy = p.ay;
@@ -179,17 +168,10 @@ public class Voyager {
 
                 double dx = otherPlanet.x - p.x;
                 double dy = otherPlanet.y - p.y;
-                double angle;
-                if (dx == 0) {
-                    angle = Math.signum(dy) * Math.PI / 2;
-                }else{
-                    angle = Math.atan(dy/dx);
-                    if ((dx < 0 && dy > 0) || (dx < 0 && dy < 0)){
-                        angle += Math.PI;
-                    }
-                }
-                force[0] += f * Math.cos(angle);
-                force[1] += f * Math.sin(angle);
+
+                double mod = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2));
+                force[0] += f * (dx/mod);
+                force[1] += f * (dy/mod);
             }
         }
         force[0] = force[0]/p.mass;

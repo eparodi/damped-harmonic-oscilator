@@ -17,12 +17,12 @@ public class CliParser {
         options.addOption("m", "mass", true, "Mass of the particle.");
         options.addOption("k", "elasticity", true, "Elasticity of the system.");
         options.addOption("g", "gamma", true, "Gamma of the system.");
-        options.addOption("tf", "finalTime", true, "Time when the simulation ends");
+        options.addOption("tf", "finalTime", true, "Time when the simulation ends.");
         options.addOption("r", "position", true, "Initial position of the particle.");
         options.addOption("dt", "deltaTime", true, "Interval of time.");
         options.addOption("alg", "algorithm", true, "Algorithm to run.");
         options.addOption("vo", "voyager", false, "Simulate Voyager 1.");
-        options.addOption("pf", "planetFile", true, "File with the planets positions.");
+        options.addOption("pf", "planetFile", true, "File with the planet's initial positions.");
         options.addOption("fps", "frames", true, "Frames per second.");
         return options;
     }
@@ -67,7 +67,7 @@ public class CliParser {
                 try {
                     planets = Parser.planetParse(planetFile);
                 }catch (Exception e){
-                    System.out.println("File not found.");
+                    System.err.println("File not found.");
                     exit(1);
                 }
                 Voyager.voyager(config, planets);
@@ -87,7 +87,7 @@ public class CliParser {
             }
 
         }catch (Exception e){
-            System.out.println("Command not recognized.");
+            System.err.println("Command not recognized.");
             help(options);
         }
 

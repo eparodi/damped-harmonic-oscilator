@@ -26,6 +26,8 @@ public class Parser {
             planets.add(p);
         }
 
+        sc.close();
+
         return planets;
     }
 }
