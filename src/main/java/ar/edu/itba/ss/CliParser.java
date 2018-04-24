@@ -2,6 +2,7 @@ package ar.edu.itba.ss;
 
 import ar.edu.itba.ss.voyager.Planet;
 import ar.edu.itba.ss.voyager.Voyager;
+import ar.edu.itba.ss.voyager.VoyagerVerlet;
 import org.apache.commons.cli.*;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class CliParser {
                     exit(1);
                 }
                 Voyager.voyager(config, planets);
+//                VoyagerVerlet.voyager(config, planets);
                 exit(0);
             }
 

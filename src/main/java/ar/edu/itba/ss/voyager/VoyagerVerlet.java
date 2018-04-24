@@ -5,7 +5,7 @@ import ar.edu.itba.ss.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Voyager {
+public class VoyagerVerlet {
 
     private static double G = 6.693*Math.pow(10, -11);
     private static final double AU = 149598073;
@@ -110,36 +110,17 @@ public class Voyager {
                     p.ay = force[1];
 
 
-                    /* Beeman */
-                    p.x = p.x + p.vx * dt + (2.0 / 3) * p.ax * Math.pow(dt, 2) - (1.0 / 6) * p.prevAx * Math.pow(dt, 2);
-                    p.y = p.y + p.vy * dt + (2.0 / 3) * p.ax * Math.pow(dt, 2) - (1.0 / 6) * p.prevAy * Math.pow(dt, 2);
+                    /* Verlet */
+                    double newX = 2 * p.x - p.prevX + Math.pow(dt, 2) * p.ax;
+                    double newY = 2 * p.y - p.prevY + Math.pow(dt, 2) * p.ay;
 
-//                    double[] newForce = force(p, oldPlanets);
-//
-//                    double newAx = newForce[0];
-//                    double newAy = newForce[1];
-//
-//                    p.vx = p.vx + 1.0 / 3 * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
-//                    p.vy = p.vy + 1.0 / 3 * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
-//
-//                    p.prevAx = p.ax;
-//                    p.prevAy = p.ay;
-                }
-            }
+                    p.vx = (newX - p.x) / (2 * dt);
+                    p.vy = (newY - p.y) / (2 * dt);
 
-            for (Planet p : planets) {
-                if (p.id != SUN_ID) {
-
-                    double[] newForce = force(p, planets);
-
-                    double newAx = newForce[0];
-                    double newAy = newForce[1];
-
-                    p.vx = p.vx + (1.0 / 3) * newAx * dt + (5.0 / 6) * p.ax * dt - (1.0 / 6) * p.prevAx * dt;
-                    p.vy = p.vy + (1.0 / 3) * newAy * dt + (5.0 / 6) * p.ay * dt - (1.0 / 6) * p.prevAy * dt;
-
-                    p.prevAx = p.ax;
-                    p.prevAy = p.ay;
+                    p.prevX = p.x;
+                    p.prevY = p.y;
+                    p.x = newX;
+                    p.y = newY;
                 }
             }
 
@@ -202,6 +183,8 @@ public class Voyager {
         p.prevAx = force[0];
         p.prevAy = force[1];
 
+        p.prevX = p.x;
+        p.prevY = p.y;
         p.vx = p.vx + dt * p.prevAx;
         p.vy = p.vy + dt * p.prevAy;
         p.x = p.x + dt * p.vx + Math.pow(dt, 2) * p.prevAx / 2;
